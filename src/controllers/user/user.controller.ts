@@ -15,8 +15,8 @@ export class UserController {
     /**
      * common request handler for all user specific operations
      */
-    handleUser = () => {
-
+    handleUser = (requestData: any, s: any, f: any) => {
+        s(requestData);
     }
 
     /**

@@ -139,8 +139,8 @@ export class RequestParserService {
                 /**
                  * else there must be only only child and that is the selected route by route design
                  */
-                route = routes && routes[0];
-                params[routes[Object.keys(routes)[0]].dynamicIdKey] = splittedPath[index];
+                route = routes && routes[Object.keys(routes) && Object.keys(routes)[0]] && routes[Object.keys(routes)[0]];
+                params[route && route.dynamicIdKey] = splittedPath[index];
             }
         }
         return route;

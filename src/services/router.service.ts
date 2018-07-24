@@ -7,19 +7,26 @@ export class RouterService {
     userController = new UserController();
 
     routes = {
-        'ping': {
-            'controller': this.pingController.checkPing,
-            'authorization': false,
-        },
-        'users': {
-            'controller': this.userController.handleUsers,
-            'authorization': true,
+        'api': {
+            /**
+             * here all the api related routes are present
+             */
             'childRoutes': {
-                ':id': {
-                    'controller': this.userController.handleUser,
-                    'dynamicIdKey': 'userId',
-                    'authorization': true
+                'ping': {
+                    'controller': this.pingController.checkPing,
+                    'authorization': false,
                 },
+                'users': {
+                    'controller': this.userController.handleUsers,
+                    'authorization': true,
+                    'childRoutes': {
+                        ':id': {
+                            'controller': this.userController.handleUser,
+                            'dynamicIdKey': 'userId',
+                            'authorization': true
+                        },
+                    }
+                }
             }
         }
     }
