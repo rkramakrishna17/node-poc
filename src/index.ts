@@ -2,12 +2,12 @@
  * importing dependencies
  */
 import * as http from "http";
-import { RequestHandler } from './utilities/requesthandler';
+import { RequestParserService } from './services/requestparser.service';
 
 class ServerApp {
 
     server: any;
-    RequestHandler = new RequestHandler();
+    RequestHandler = new RequestParserService();
 
     constructor () {
 
