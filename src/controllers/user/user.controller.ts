@@ -1,5 +1,11 @@
+/**
+ * importing dependencies
+ */
+import { ResponseHandlerService } from './../../services/responsehandler.service';
 
 export class UserController {
+
+    _responseHandler = new ResponseHandlerService();
 
     allowedUsersMethods = ['GET'];
     allowedUserRelatedMethods = ['GET', 'POST', 'PUT', 'DELETE'];
@@ -9,7 +15,14 @@ export class UserController {
      * arguments are clientRequestData, success callback and failure callback
      */
     handleUsers = (requestData: any, s: any, f: any) => {
-        s(requestData);
+        let method = requestData.method;
+        if (this.allowedUsersMethods.indexOf(method) > (-1)) {
+            s({
+                'success': 'method found',
+            })
+        } else {
+            this._responseHandler.methodNotFound(f);
+        }
     }
 
     /**

@@ -32,6 +32,8 @@
 npm-debug.log
 testem.log
 /typings
+node-poc
+node-poc.pub
 
 # e2e
 /e2e/*.js

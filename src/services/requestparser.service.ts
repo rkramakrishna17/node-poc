@@ -3,6 +3,7 @@ import { StringDecoder } from 'string_decoder';
 import * as url from 'url';
 
 import { RouterService } from './router.service';
+import { UtilsService } from './utils.service'
 
 export class RequestParserService {
 
@@ -10,6 +11,7 @@ export class RequestParserService {
      * declaring class variables
      */
     Router = new RouterService().routes;
+    _utils = new UtilsService();
 
     /**
      * parse incomming url and execute respective controller
@@ -64,16 +66,20 @@ export class RequestParserService {
              */
             controller(requestData, (controllerResponse: any) => {
                 response.statusCode = 200;
+                response.setHeader('x-token', requestData.headers['x-token'] || this._utils.guid());
                 /**
                  * ending the response with a success callback
                  */
                 response.end(JSON.stringify(controllerResponse));
-            }, (controllerFailureMessage: any) => {
-                response.statusCode = 500;
+            }, (controllerFailure: { statusCode?: number, body?: object }) => {
+                response.statusCode = controllerFailure.statusCode || 500;
+                response.setHeader('x-token', requestData.headers['x-token'] || this._utils.guid());
                 /**
                  * ending the response with failure callback
                  */
-                response.end(JSON.stringify(controllerFailureMessage));
+                response.end(JSON.stringify(controllerFailure.body || {
+                    'error': 'Failed due to server error',
+                }));
             })
         } else {
             /**
