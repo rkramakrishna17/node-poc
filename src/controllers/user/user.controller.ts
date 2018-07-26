@@ -15,21 +15,22 @@ export class UserController {
      * arguments are clientRequestData, success callback and failure callback
      */
     handleUsers = (requestData: any, s: any, f: any) => {
-        let method = requestData.method;
-        if (this.allowedUsersMethods.indexOf(method) > (-1)) {
+        this._responseHandler.checkIfMethodisAllowed(this.allowedUsersMethods, requestData.method, (): any => {
             s({
-                'success': 'method found',
+                success: 'Method exists',
             })
-        } else {
-            this._responseHandler.methodNotFound(f);
-        }
+        }, f);
     }
 
     /**
      * common request handler for all user specific operations
      */
     handleUser = (requestData: any, s: any, f: any) => {
-        s(requestData);
+        this._responseHandler.checkIfMethodisAllowed(this.allowedUserRelatedMethods, requestData.method, (): any => {
+            s({
+                success: 'Method exists',
+            })
+        }, f);
     }
 
     /**
