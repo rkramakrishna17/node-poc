@@ -25,9 +25,9 @@ The distribution folder can be found in '/dist' folder
 currently available routes
 
 1. Ping
-1. Route: check ping ('/api/ping')
-2. Methods allowed : ['GET']
-3. Success output format : JSON
-4. Success output : { success: 'Server is running' }
-5. failure output format : JSON
-6. failure output : { 'error': message || 'Method not found' }
+    1. Route: check ping ('/api/ping')
+    2. Methods allowed : ['GET']
+    3. Success output format : JSON
+    4. Success output : { success: 'Server is running' }
+    5. failure output format : JSON
+    6. failure output : { 'error': message || 'Method not found' }
