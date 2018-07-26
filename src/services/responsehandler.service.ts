@@ -13,7 +13,7 @@ export class ResponseHandlerService {
         let data = {
             statusCode: 404,
             body: body || {
-                'error': message || 'Method not found',
+                'error': message || 'Method not allowed',
             }
         }
         failureCallback(data);

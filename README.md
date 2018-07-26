@@ -30,4 +30,4 @@ currently available routes
     3. Success output format : JSON
     4. Success output : { success: 'Server is running' }
     5. failure output format : JSON
-    6. failure output : { 'error': message || 'Method not found' }
+    6. failure output : { 'error': message || 'Method not allowed' }
