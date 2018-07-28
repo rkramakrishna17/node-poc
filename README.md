@@ -18,7 +18,7 @@ To report issues: https://github.com/rkramakrishna17/node-poc/issues
 To start project in various modes :
 1. npm install : to install dependencies
 2. npm start : start a typescript compiler in watch mode and start a nodemon server concurrently
-3. npm build : compile with typescript compiler and start a node server
+3. npm run-script build : compile with typescript compiler and start a node server
 
 The distribution folder can be found in '/dist' folder
 
