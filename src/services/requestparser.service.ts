@@ -4,20 +4,23 @@ import * as url from 'url';
 
 import { RouterService } from './router.service';
 import { UtilsService } from './utils.service'
+import { ResponseInterface } from '../interfaces/successresponse.interface';
 
 export class RequestParserService {
 
     /**
      * declaring class variables
      */
-    Router = new RouterService().routes;
-    _utils = new UtilsService();
+    private _router = new RouterService().routes;
+    private _utils = new UtilsService();
 
     /**
      * parse incomming url and execute respective controller
      */
     parseIncommingRequestURL = (req: http.ServerRequest, res: http.ServerResponse) => {
 
+        req.headers['x-token'] = req.headers['x-token'] || this._utils.guid();
+        res.setHeader('x-token', req.headers['x-token'] || this._utils.guid());
         /**
          * gathering required data
          */
@@ -48,7 +51,7 @@ export class RequestParserService {
                 queryParams: queryParams,
                 headers: headers,
                 method: method || "",
-                payload: dataBuffer,
+                payload: JSON.parse(dataBuffer),
                 params: {},
             }
             this.handleRequest(requestData, res);
@@ -60,27 +63,38 @@ export class RequestParserService {
      */
     handleRequest = (requestData: any, response: http.ServerResponse) => {
         let controller = requestData && requestData !== undefined && this.getControllerByPath(requestData);
+
         if (controller) {
             /**
              * the selected path exists
              */
-            controller(requestData, (controllerResponse: any) => {
-                response.statusCode = 200;
-                response.setHeader('x-token', requestData.headers['x-token'] || this._utils.guid());
-                /**
-                 * ending the response with a success callback
-                 */
-                response.end(JSON.stringify(controllerResponse));
-            }, (controllerFailure: { statusCode?: number, body?: object }) => {
-                response.statusCode = controllerFailure.statusCode || 500;
-                response.setHeader('x-token', requestData.headers['x-token'] || this._utils.guid());
-                /**
-                 * ending the response with failure callback
-                 */
-                response.end(JSON.stringify(controllerFailure.body || {
-                    'error': 'Failed due to server error',
-                }));
-            })
+            try {
+                controller(requestData, (controllerResponse: ResponseInterface) => {
+                    response.statusCode = 200;
+                    if (controllerResponse.headers) {
+                        for (let key in controllerResponse.headers) {
+                            response.setHeader(key, controllerResponse.headers[key]);
+                        }
+                    }
+                    /**
+                     * ending the response with a success callback
+                     */
+                    response.end(JSON.stringify(controllerResponse.body));
+                }, (controllerFailure: { statusCode?: number, body?: object }) => {
+                    response.statusCode = controllerFailure.statusCode || 500;
+                    /**
+                     * ending the response with failure callback
+                     */
+                    // console.log(controllerFailure.body);
+                    response.end(JSON.stringify(controllerFailure.body || {
+                        'error': 'Failed due to server error',
+                    }));
+                });
+            } catch (e) {
+                response.statusCode = 500;
+                console.log(e);
+                response.end(JSON.stringify({ 'error': 'Failed due to server error' }));
+            }
         } else {
             /**
              * handle no route found
@@ -96,7 +110,7 @@ export class RequestParserService {
     getControllerByPath = (requestData: any) => {
         let splittedPath = requestData.path.split('/');
         let params = requestData.params;
-        let route = this.deepSearchRoute(splittedPath, 0, this.Router, params);
+        let route = this.deepSearchRoute(splittedPath, 0, this._router, params);
         return route && route.controller;
     }
 

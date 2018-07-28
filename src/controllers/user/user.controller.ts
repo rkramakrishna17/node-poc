@@ -1,14 +1,14 @@
 /**
  * importing dependencies
  */
-import { ResponseHandlerService } from './../../services/responsehandler.service';
+import { ResponseHandlerService } from '../../services/responsehandler.service';
 
 export class UserController {
 
-    _responseHandler = new ResponseHandlerService();
+    private _responseHandler = new ResponseHandlerService();
 
-    allowedUsersMethods = ['GET'];
-    allowedUserRelatedMethods = ['GET', 'POST', 'PUT', 'DELETE'];
+    private allowedUsersMethods = ['GET'];
+    private allowedUserRelatedMethods = ['GET', 'POST', 'PUT', 'DELETE'];
 
     /**
      * common request handler for all users related operations

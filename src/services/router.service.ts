@@ -1,10 +1,15 @@
 import { PingController } from "../controllers/ping/ping.controller";
 import { UserController } from "../controllers/user/user.controller";
+import { RegisterController } from "../controllers/register/register.controller";
+import { SessionController } from "../controllers/session/session.controller";
 
 export class RouterService {
 
-    pingController = new PingController();
-    userController = new UserController();
+    private _pingController = new PingController();
+    private _userController = new UserController();
+    private _registerController = new RegisterController();
+    private _sessionController = new SessionController();
+
 
     routes = {
         'api': {
@@ -13,15 +18,23 @@ export class RouterService {
              */
             'childRoutes': {
                 'ping': {
-                    'controller': this.pingController.checkPing,
+                    'controller': this._pingController.checkPing,
+                    'authorization': false,
+                },
+                'register': {
+                    'controller': this._registerController.register,
+                    'authorization': false,
+                },
+                'login': {
+                    'controller': this._sessionController.login,
                     'authorization': false,
                 },
                 'users': {
-                    'controller': this.userController.handleUsers,
+                    'controller': this._userController.handleUsers,
                     'authorization': true,
                     'childRoutes': {
                         ':id': {
-                            'controller': this.userController.handleUser,
+                            'controller': this._userController.handleUser,
                             'dynamicIdKey': 'userId',
                             'authorization': true
                         },

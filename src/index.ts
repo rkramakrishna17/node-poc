@@ -3,11 +3,13 @@
  */
 import * as http from "http";
 import { RequestParserService } from './services/requestparser.service';
+import { WorkersService } from './services/workers.service';
 
 class ServerApp {
 
-    server: any;
-    RequestHandler = new RequestParserService();
+    private server: any;
+    private _requestHandler = new RequestParserService();
+    private _workersService = new WorkersService();
 
     constructor () {
 
@@ -26,7 +28,7 @@ class ServerApp {
              */
             res.setHeader('Content-Type', 'json');
             res.statusCode = 200;
-            this.RequestHandler.parseIncommingRequestURL(req, res);
+            this._requestHandler.parseIncommingRequestURL(req, res);
         });
 
         /**
@@ -36,9 +38,17 @@ class ServerApp {
     }
 
     startListening = () => {
+        /**
+         * start server
+         */
         this.server.listen('3000', () => {
             console.log("Server listening on 3000 port");
         })
+
+        /**
+         * start workers
+         */
+        this._workersService.init();
     }
 
 }

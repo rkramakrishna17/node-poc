@@ -19,9 +19,11 @@
     },
     "homepage": "https://github.com/rkramakrishna17/node-poc#readme",
     "dependencies": {
+        "mongodb": "^3.1.1",
         "node": "^10.7.0"
     },
     "devDependencies": {
+        "@types/mongodb": "^3.1.2",
         "@types/node": "^10.5.2",
         "concurrently": "^2.2.0",
         "nodemon": "^1.18.3",

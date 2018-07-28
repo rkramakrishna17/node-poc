@@ -1,7 +1,7 @@
 /**
  * importing dependencies
  */
-import { ResponseHandlerService } from './../../services/responsehandler.service';
+import { ResponseHandlerService } from '../../services/responsehandler.service';
 
 export class PingController {
 
@@ -18,7 +18,9 @@ export class PingController {
     checkPing = (requestData: any, s: any, f: any) => {
         this._responseHandler.checkIfMethodisAllowed(this.allowedMethods, requestData.method, (): any => {
             s({
-                success: 'Server is running',
+                body: {
+                    message: 'Server is running',
+                }
             })
         }, f);
     }
